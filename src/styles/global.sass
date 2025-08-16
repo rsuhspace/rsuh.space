@@ -1,0 +1,72 @@
+@use "vars"
+@import url(https://fonts.bunny.net/css?family=manrope:400,500,600,700|roboto-mono:400,600)
+
+*, *:before, *:after
+  box-sizing: border-box
+  -webkit-tap-highlight-color: transparent
+  outline: none
+
+html, body
+  margin: 0
+  padding: 0
+  font-family: 'Manrope', sans-serif
+  -webkit-font-smoothing: antialiased
+  background-color: var(--bg)
+  color: var(--text)
+
+html, body, #app
+  height: 100%
+  min-height: fit-content
+
+#app
+  display: flex
+  flex-direction: column
+
+  > main
+    flex: 1
+
+::selection
+  background-color: var(--accent)
+  color: var(--bg)
+
+input, button, select, textarea
+  display: block
+  appearance: none
+  border: none
+  background: none
+  font: inherit
+  color: currentColor
+  padding: 0
+  margin: 0
+
+button
+  cursor: pointer
+
+img, svg
+  display: block
+
+.container
+  --container-width: 1300px
+  --container-padding: 24px
+  width: 100%
+  max-width: calc(var(--container-width) + var(--container-padding) * 2)
+  padding-inline: var(--container-padding)
+  margin-inline: auto
+
+.icon
+  display: block
+  --icon-size: 20px
+  --icon-thickness: 1.8
+  width: var(--icon-size)
+  height: var(--icon-size)
+  flex-shrink: 0
+
+  path
+    stroke-width: var(--icon-thickness)
+
+.fade
+  &-enter-active, &-leave-active
+    transition: opacity .2s ease
+
+  &-enter-from, &-leave-to
+    opacity: 0

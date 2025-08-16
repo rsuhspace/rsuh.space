@@ -1,0 +1,21 @@
+@mixin trim-margins
+  & > :first-child
+    margin-top: 0
+
+  & > :last-child
+    margin-bottom: 0
+
+@mixin hide-scrollbar
+  &::-webkit-scrollbar
+    display: none
+
+  -ms-overflow-style: none
+  scrollbar-width: none
+
+@mixin mobile
+  @media (width < 660px)
+    @content
+
+@mixin desktop
+  @media (width >= 660px)
+    @content

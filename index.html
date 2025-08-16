@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8"/>
+  <link rel="icon" href="/favicon.ico"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+  <title>Расписание РГГУ</title>
+  <meta name="title" content="Расписание РГГУ">
+  <meta name="description" content="Расписание пар РГГУ. Как официальное, только лучше">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://rsuh.space/">
+  <meta property="og:title" content="Расписание РГГУ">
+  <meta property="og:description" content="Расписание пар РГГУ. Как официальное, только лучше">
+  <meta property="og:image" content="">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="alternate icon" href="/favicon.ico" type="image/png" sizes="16x16">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <meta name="theme-color" content="#15171e">
+  <script>
+    if (window.localStorage.getItem('theme')) {
+      document.documentElement.dataset.theme = window.localStorage.getItem('theme')
+    } else {
+      const theme = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light'
+      document.documentElement.dataset.theme = theme
+      window.localStorage.setItem('theme', theme)
+    }
+  </script>
+</head>
+<body>
+<div id="app"></div>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

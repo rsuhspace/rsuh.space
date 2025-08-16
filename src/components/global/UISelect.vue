@@ -1,49 +1,51 @@
 <template>
   <ComboboxRoot
-      class="select"
+      as-child
       v-model:open="isOpen"
       :disabled="disabled"
       :reset-search-term-on-blur="false"
       :reset-search-term-on-select="false"
       :ref="'rootEl'"
   >
-    <ComboboxAnchor class="select__anchor">
-      <ComboboxInput
-          v-model="search"
-          :placeholder="placeholder"
-          @focus="isOpen = true"
-          :display-value="(val: T) => getOptionByValue(val)?.label || ''"
-          @keydown="onKeyDown"
-      />
-      <Spinner v-if="loading"/>
-      <i-tabler-chevron-down v-else-if="!isOpen"/>
-      <i-tabler-chevron-up v-else/>
-    </ComboboxAnchor>
+    <div class="select" @focusout="isOpen = false">
+      <ComboboxAnchor class="select__anchor">
+        <ComboboxInput
+            v-model="search"
+            :placeholder="placeholder"
+            @focus="isOpen = true"
+            :display-value="(val: T) => getOptionByValue(val)?.label || ''"
+            @keydown="onKeyDown"
+        />
+        <Spinner v-if="loading"/>
+        <i-tabler-chevron-down v-else-if="!isOpen"/>
+        <i-tabler-chevron-up v-else/>
+      </ComboboxAnchor>
 
-    <Transition name="fade">
-      <ComboboxContent position="popper" class="select__options" :side-offset="4" :collision-padding="8"
-                       @focus-outside.prevent v-if="filteredOptions.length">
-        <!-- Volar complains unless we specify the ref like this. No idea why. -->
-        <ComboboxViewport :ref="'viewportEl'">
-          <button
-              class="select__option"
-              role="option"
-              v-for="(option, i) in filteredOptions"
-              :key="option.value!.toString()"
-              @click="selectOption(option)"
-              @pointerenter="highlightedIndex = i"
-              tabindex="-1"
-              :data-highlight="highlightedIndex === i"
-              :aria-selected="modelValue === option.value"
-              :data-state="modelValue === option.value ? 'checked' : 'unchecked'"
-          >
-            <slot name="option" v-bind="option">
-              {{ option.label }}
-            </slot>
-          </button>
-        </ComboboxViewport>
-      </ComboboxContent>
-    </Transition>
+      <Transition name="fade">
+        <ComboboxContent position="popper" class="select__options" :side-offset="4" :collision-padding="8"
+                         @focus-outside.prevent v-if="filteredOptions.length">
+          <!-- Volar complains unless we specify the ref like this. No idea why. -->
+          <ComboboxViewport :ref="'viewportEl'">
+            <button
+                class="select__option"
+                role="option"
+                v-for="(option, i) in filteredOptions"
+                :key="option.value!.toString()"
+                @click="selectOption(option)"
+                @pointerenter="highlightedIndex = i"
+                tabindex="-1"
+                :data-highlight="highlightedIndex === i"
+                :aria-selected="modelValue === option.value"
+                :data-state="modelValue === option.value ? 'checked' : 'unchecked'"
+            >
+              <slot name="option" v-bind="option">
+                {{ option.label }}
+              </slot>
+            </button>
+          </ComboboxViewport>
+        </ComboboxContent>
+      </Transition>
+    </div>
   </ComboboxRoot>
 </template>
 

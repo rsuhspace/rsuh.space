@@ -5,6 +5,7 @@
       :disabled="disabled"
       :reset-search-term-on-blur="false"
       :reset-search-term-on-select="false"
+      :ref="'rootEl'"
   >
     <ComboboxAnchor class="select__anchor">
       <ComboboxInput
@@ -20,25 +21,26 @@
     </ComboboxAnchor>
 
     <Transition name="fade">
-      <ComboboxContent position="popper" class="select__options" :side-offset="4" :collision-padding="8" v-if="filteredOptions.length">
+      <ComboboxContent position="popper" class="select__options" :side-offset="4" :collision-padding="8"
+                       @focus-outside.prevent v-if="filteredOptions.length">
         <!-- Volar complains unless we specify the ref like this. No idea why. -->
         <ComboboxViewport :ref="'viewportEl'">
-            <button
-                class="select__option"
-                role="option"
-                v-for="(option, i) in filteredOptions"
-                :key="option.value!.toString()"
-                @click="selectOption(option)"
-                @pointerenter="highlightedIndex = i"
-                tabindex="-1"
-                :data-highlight="highlightedIndex === i"
-                :aria-selected="modelValue === option.value"
-                :data-state="modelValue === option.value ? 'checked' : 'unchecked'"
-            >
-              <slot name="option" v-bind="option">
-                {{ option.label }}
-              </slot>
-            </button>
+          <button
+              class="select__option"
+              role="option"
+              v-for="(option, i) in filteredOptions"
+              :key="option.value!.toString()"
+              @click="selectOption(option)"
+              @pointerenter="highlightedIndex = i"
+              tabindex="-1"
+              :data-highlight="highlightedIndex === i"
+              :aria-selected="modelValue === option.value"
+              :data-state="modelValue === option.value ? 'checked' : 'unchecked'"
+          >
+            <slot name="option" v-bind="option">
+              {{ option.label }}
+            </slot>
+          </button>
         </ComboboxViewport>
       </ComboboxContent>
     </Transition>
@@ -64,6 +66,7 @@ import {
 } from 'reka-ui'
 import {computed, nextTick, onMounted, ref, watch} from 'vue'
 import Spinner from '@/components/global/Spinner.vue'
+import {useEventListener} from '@vueuse/core'
 
 const props = defineProps<{
   options: SelectOption<T>[]
@@ -78,6 +81,7 @@ const emit = defineEmits<{
   'update:modelValue': [value: T]
 }>()
 
+const rootEl = ref()
 const isOpen = ref(false)
 const search = ref('')
 const justOpened = ref(false)
@@ -174,6 +178,10 @@ watch(filteredOptions, () => {
   if (highlightedIndex.value >= filteredOptions.value.length) {
     highlightedIndex.value = filteredOptions.value.length - 1
   }
+})
+
+useEventListener(document, 'focusin', e => {
+  if (!rootEl.value.$el.nextElementSibling.contains(e.target)) isOpen.value = false
 })
 </script>
 

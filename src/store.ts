@@ -34,7 +34,7 @@ export const useStore = defineStore('schedule', {
 
   getters: {
     activeGroup(state) {
-      if (state.group.form && state.group.year && state.group.id) return state.group
+      if (state.group?.form && state.group?.year && state.group?.id) return state.group
     },
     getGroupById: (state) => (id: string) => state.groups.find(group => group.id === id),
     getRoomByName: (state) => (name: string) => state.rooms?.find(room => room.name === name),

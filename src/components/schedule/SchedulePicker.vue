@@ -152,7 +152,13 @@ watch(() => [store.activeGroup, store.teacher, store.room], (value) => {
 })
 
 watch(() => [store.teacher, store.room], values => {
-  if (values.some(Boolean)) store.groups = []
+  if (values.some(Boolean)) {
+    store.groups = []
+    selectedGroup.id = undefined
+    selectedGroup.form = undefined
+    selectedGroup.year = undefined
+    selectedGroup.name = undefined
+  }
 })
 </script>
 

@@ -52,6 +52,11 @@ async function generateICS(event) {
   const knownLectureTypes = ['лек', 'сем', 'экзамен']
   const lectureTypes = query.types?.split(',') || [...knownLectureTypes, 'other']
 
+  function matchesKnownType(type, targetTypes) {
+    const t = type.toLowerCase()
+    return targetTypes.some(kt => t.includes(kt.toLowerCase()))
+  }
+
   const eventList = []
   for (const day of data.tblData) {
     const date = day.date.split(' ')[0].split('.').map(Number).reverse()
@@ -62,10 +67,10 @@ async function generateICS(event) {
       const endTime = time.end.split(':').map(Number)
 
       for (const flow of lesson.flows) {
-        if (
-            !lectureTypes.includes(flow.lessontype) &&
-            !(!knownLectureTypes.includes(flow.lessontype) && lectureTypes.includes('other'))
-        ) {
+        const hasKnown = matchesKnownType(flow.lessontype, knownLectureTypes)
+        const isInLectureTypes = matchesKnownType(flow.lessontype, lectureTypes)
+
+        if (!(isInLectureTypes || (!hasKnown && lectureTypes.includes('other')))) {
           continue
         }
 

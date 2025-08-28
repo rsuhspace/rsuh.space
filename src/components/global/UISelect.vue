@@ -189,7 +189,7 @@ function onFocusOut(e: FocusEvent) {
 }
 
 useEventListener(document, 'focusin', e => {
-  if (!rootEl.value.$el.nextElementSibling.contains(e.target)) isOpen.value = false
+  if (rootEl.value && !rootEl.value.$el.nextElementSibling.contains(e.target)) isOpen.value = false
 })
 </script>
 

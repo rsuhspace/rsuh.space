@@ -44,7 +44,6 @@ defineExpose({
 </script>
 
 <style lang="sass" scoped>
-//:deep()
 .dialog
   &__overlay
     position: fixed
@@ -64,6 +63,7 @@ defineExpose({
     width: min(550px, calc(100vw - 40px))
     height: fit-content
     max-height: calc(100vh - 40px)
+    overflow: auto
 
     header
       display: flex

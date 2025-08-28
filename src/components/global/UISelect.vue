@@ -5,9 +5,8 @@
       :disabled="disabled"
       :reset-search-term-on-blur="false"
       :reset-search-term-on-select="false"
-      :ref="'rootEl'"
   >
-    <div class="select" @focusout="onFocusOut">
+    <div class="select" @focusout="onFocusOut" ref="rootEl">
       <ComboboxAnchor class="select__anchor">
         <ComboboxInput
             v-model="search"
@@ -183,13 +182,13 @@ watch(filteredOptions, () => {
 })
 
 function onFocusOut(e: FocusEvent) {
-  if (!rootEl.value?.$el.nextElementSibling.contains(e.relatedTarget)) {
-    isOpen.value = false
-  }
+  if (!isOpen.value) return
+  const isClickInside = rootEl.value.contains(e.relatedTarget)
+  if (!isClickInside) isOpen.value = false
 }
 
 useEventListener(document, 'focusin', e => {
-  if (rootEl.value && !rootEl.value.$el.nextElementSibling.contains(e.target)) isOpen.value = false
+  if (!rootEl.value.contains(e.target)) isOpen.value = false
 })
 </script>
 

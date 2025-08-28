@@ -44,6 +44,7 @@ jobs:
         run: yarn build
         env:
           VITE_API_URL: ${{ vars.VITE_API_URL }}
+          VITE_COMMIT_SHA: ${{ github.sha }}
 
       - name: Copy index.html to 404.html
         run: cp dist/index.html dist/404.html

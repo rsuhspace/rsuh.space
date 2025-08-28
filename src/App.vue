@@ -7,7 +7,7 @@
   <Schedule/>
 
   <footer class="container">
-    <div>
+    <div class="links">
       <a href="https://t.me/rsuhspace" target="_blank">
         <i-tabler-brand-telegram/>
         Телеграм-канал
@@ -23,6 +23,7 @@
     </div>
     <div>
       <small>v{{ version }}</small>
+      <small v-if="commit"> ({{ commit.slice(0, 7) }})</small>
     </div>
   </footer>
 
@@ -45,6 +46,7 @@ useRegisterSW({
 })
 
 const version = APP_VERSION
+const commit = import.meta.env.VITE_COMMIT_SHA
 
 onMounted(() => {
   const lastVersion = localStorage.getItem('version')
@@ -76,11 +78,13 @@ footer
   @include trim-margins
 
   > div
+    margin-block: 12px
+
+  .links
     display: flex
     align-items: center
     flex-wrap: wrap
     gap: 8px
-    margin-block: 12px
 
   a
     display: flex

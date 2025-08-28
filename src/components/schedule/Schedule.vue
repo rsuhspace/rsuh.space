@@ -4,7 +4,7 @@
       <template v-if="store.days && Object.keys(store.days)?.length">
         <ScheduleTable v-if="store.settings.view === 'table'"/>
         <template v-else>
-          <Week v-for="week in scheduleWeeks" :start="week"/>
+          <Week v-for="week in scheduleWeeks" :start="week" :key="week.toISOString()"/>
         </template>
       </template>
 

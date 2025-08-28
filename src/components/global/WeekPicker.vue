@@ -46,6 +46,7 @@
           <span
               class="day"
               v-for="day in week"
+              :key="day.toISOString()"
               :class="{
                 today: day.isSame(dayjs(), 'day'),
                 active: week[0].isSame(modelValue, 'day'),

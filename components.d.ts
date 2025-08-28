@@ -10,7 +10,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddToHomeScreen: typeof import('./src/components/schedule/toolbar/AddToHomeScreen.vue')['default']
     CalendarExportDialog: typeof import('./src/components/schedule/CalendarExportDialog.vue')['default']
-    CalendarLink: typeof import('./src/components/schedule/calendar-export/CalendarLink.vue')['default']
     Checkbox: typeof import('./src/components/global/Checkbox.vue')['default']
     CopyText: typeof import('./src/components/global/CopyText.vue')['default']
     Day: typeof import('./src/components/schedule/list/Day.vue')['default']

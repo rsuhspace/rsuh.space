@@ -55,7 +55,7 @@ if ('onbeforeinstallprompt' in window) {
   window.addEventListener('beforeinstallprompt', (event) => {
     if (!mobilePlatform) return
     event.preventDefault()
-    // nativePrompt.value = event
+    nativePrompt.value = event
     shouldShow.value = true
   })
 }

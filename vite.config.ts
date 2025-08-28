@@ -6,10 +6,12 @@ import Components from 'unplugin-vue-components/vite'
 import {fileURLToPath, URL} from 'url'
 import {VitePWA} from 'vite-plugin-pwa'
 import autoprefixer from 'autoprefixer'
+import vueJsx from '@vitejs/plugin-vue-jsx'
 
 export default defineConfig({
   plugins: [
     vue(),
+    vueJsx(),
     Components({
       resolvers: [
         IconsResolver()

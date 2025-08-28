@@ -49,6 +49,8 @@ async function generateICS(event) {
   })).json()
 
   const calendarName = data.item
+  const knownLectureTypes = ['лек', 'сем', 'экзамен']
+  const lectureTypes = query.types?.split(',') || [...knownLectureTypes, 'other']
 
   const eventList = []
   for (const day of data.tblData) {
@@ -60,6 +62,13 @@ async function generateICS(event) {
       const endTime = time.end.split(':').map(Number)
 
       for (const flow of lesson.flows) {
+        if (
+            !lectureTypes.includes(flow.lessontype) &&
+            !(!knownLectureTypes.includes(flow.lessontype) && lectureTypes.includes('other'))
+        ) {
+          continue
+        }
+
         const lessonObject = {
           start: [...date, startTime[0] - 3, startTime[1]],
           startInputType: 'utc',
@@ -130,4 +139,4 @@ module.exports.handler = async function (event) {
       body: JSON.stringify(e)
     }
   }
-};
+}

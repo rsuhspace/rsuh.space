@@ -21,6 +21,7 @@
           <li>Выбрать «Добавить по URL».</li>
           <li>Вставить в поле эту ссылку:
             <CopyText :text="icsLink"/>
+            <LectureTypes/>
           </li>
         </ol>
         <p>В начале следующего семестра нужно будет удалить эту подписку из календаря и добавить новую.</p>
@@ -33,6 +34,7 @@
           </li>
           <li>Вставить в поле эту ссылку:
             <CopyText :text="icsLink"/>
+            <LectureTypes/>
           </li>
         </ol>
         <p>В начале следующего семестра нужно будет удалить эту подписку из календаря и добавить новую.</p>
@@ -44,6 +46,7 @@
               <i-tabler-download/>
               Скачать файл .ics
             </button>
+            <LectureTypes/>
           </li>
           <li>Импортировать его в приложение календаря.<br>
             <b>Важно:</b> расписание, импортированное из файла, не будет обновляться автоматически.
@@ -54,10 +57,19 @@
   </Dialog>
 </template>
 
-<script setup lang="ts">
+<script setup lang="tsx">
 import Dialog from '@/components/global/Dialog.vue'
-import {computed} from 'vue'
-import {TabsContent, TabsRoot, TabsTrigger} from 'reka-ui'
+import Checkbox from '@/components/global/Checkbox.vue'
+import {computed, ref} from 'vue'
+import {
+  CollapsibleContent,
+  CollapsibleRoot,
+  CollapsibleTrigger,
+  TabsContent,
+  TabsRoot,
+  TabsTrigger,
+  CheckboxGroupRoot
+} from 'reka-ui'
 import {useStore} from '@/store.ts'
 
 const tabs = {
@@ -72,6 +84,8 @@ const calendarName = computed(() => {
   return store.teacher?.name || store.activeGroup?.name
 })
 
+const includeLectureTypes = ref(['лек', 'сем', 'экзамен', 'other'])
+
 const icsLink = computed(() => {
   let params = ''
   if (store.teacher) params = `teacher=${store.teacher.id}`
@@ -79,9 +93,12 @@ const icsLink = computed(() => {
     const paramsObj = new URLSearchParams({
       eduform: store.activeGroup.form!,
       course: store.activeGroup.year!.toString(),
-      flow: store.activeGroup.id!
+      flow: store.activeGroup.id!,
     })
     params = paramsObj.toString()
+  }
+  if (includeLectureTypes.value.length < 4) {
+    params += `&types=${includeLectureTypes.value.join(',')}`
   }
   return `${import.meta.env.VITE_API_URL}/Get_Schedule_Table&${params}&ics=true`
 })
@@ -90,18 +107,35 @@ async function downloadICS() {
   const ics = await (await fetch(icsLink.value)).text()
 
   const filename = `${calendarName.value}.ics`
-  const url = URL.createObjectURL(new File([ics], filename, { type: 'text/calendar' }));
+  const url = URL.createObjectURL(new File([ics], filename, {type: 'text/calendar'}))
 
-  const anchor = document.createElement('a');
-  anchor.href = url;
-  anchor.download = filename;
+  const anchor = document.createElement('a')
+  anchor.href = url
+  anchor.download = filename
 
-  document.body.appendChild(anchor);
-  anchor.click();
-  document.body.removeChild(anchor);
+  document.body.appendChild(anchor)
+  anchor.click()
+  document.body.removeChild(anchor)
 
-  URL.revokeObjectURL(url);
+  URL.revokeObjectURL(url)
 }
+
+const LectureTypes = () => <CollapsibleRoot class="lecture-types">
+  <CollapsibleTrigger>
+    Типы пар
+    <i-tabler-chevron-down/>
+  </CollapsibleTrigger>
+
+  <CollapsibleContent>
+    <CheckboxGroupRoot modelValue={includeLectureTypes.value}
+                       onUpdate:modelValue={val => includeLectureTypes.value = val}>
+      <Checkbox value="лек">Лекции</Checkbox>
+      <Checkbox value="сем">Семинары</Checkbox>
+      <Checkbox value="экзамен">Экзамены</Checkbox>
+      <Checkbox value="other">Другие</Checkbox>
+    </CheckboxGroupRoot>
+  </CollapsibleContent>
+</CollapsibleRoot>
 </script>
 
 <style lang="sass" scoped>
@@ -159,4 +193,34 @@ li
 
 .copy
   background-color: var(--bg)
+  margin-block: 8px
+
+:deep(.lecture-types)
+  > button
+    display: flex
+    align-items: center
+    gap: 4px
+    color: var(--text-secondary)
+    font-size: 14px
+    margin-block: 8px
+    transition: color .1s
+
+    &:hover
+      color: var(--text)
+
+    .icon
+      --icon-size: 16px
+
+    &[data-state="open"]
+      margin-bottom: 8px
+      color: var(--text)
+
+      .icon
+        transform: rotate(180deg)
+
+  .checkbox
+    display: inline-flex
+    align-items: center
+    margin-inline-end: 12px
+    margin-block: 4px
 </style>

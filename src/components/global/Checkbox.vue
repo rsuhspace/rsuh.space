@@ -1,5 +1,5 @@
 <template>
-  <CheckboxRoot class="checkbox" :value="value">
+  <CheckboxRoot class="checkbox" :value>
     <span class="checkbox__icon">
       <i-tabler-check/>
     </span>
@@ -9,9 +9,12 @@
 </template>
 
 <script setup lang="ts">
-import {CheckboxRoot, type CheckboxRootProps} from 'reka-ui'
+import {CheckboxRoot} from 'reka-ui'
 
-defineProps<CheckboxRootProps>()
+// Only defining this for better TS support in JSX
+defineProps<{
+  value?: string
+}>()
 </script>
 
 <style lang="sass" scoped>
